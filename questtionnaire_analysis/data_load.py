@@ -18,8 +18,8 @@ def _loads(fn):
 
 
 def data_load():
-    # fn = Path("/Users/ida/Dropbox")
-    fn = Path("/Users/test/Dropbox")
+    fn = Path("/Users/ida/Dropbox")
+    # fn = Path("/Users/test/Dropbox")
     questions = []
 
     for week in ["201810_1week", "201810_2week"]:
