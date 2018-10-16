@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 def _loads(fn):
-    datas = {}
+    datas = []
 
     if not fn.exists():
         print("[FILE ERROR]", fn, "is not found.")
@@ -18,11 +18,12 @@ def _loads(fn):
 
 
 def data_load():
-    fn = Path("/Users/ida/Dropbox")
+    # fn = Path("/Users/ida/Dropbox")
+    fn = Path("/Users/test/Dropbox")
     questions = []
 
     for week in ["201810_1week", "201810_2week"]:
-        for nth in ["questionnair_middle.csv", "questionnair_last.csv"]:
+        for nth in ["questionnaire_middle.csv", "questionnaire_last.csv"]:
             header, data = _loads(fn / week / nth)
             questions.append(data)
 
