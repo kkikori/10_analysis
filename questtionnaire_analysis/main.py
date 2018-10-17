@@ -13,12 +13,12 @@ def aggregated＿quote(week1, week2, header):
 
 
 def main():
-    header, datas = data_load.data_load()
+    middle_header, last_header, datas = data_load.data_load()
     week1 = {"middle": datas[0], "last": datas[1]}
     week2 = {"middle": datas[2], "last": datas[3]}
 
     # aggregated＿quote(week1, week2, header)
-    mykruskal.significant_difference(week1, week2, header)
+    mykruskal.significant_difference(week1, week2, middle_header, last_header)
 
 
 if __name__ == "__main__":

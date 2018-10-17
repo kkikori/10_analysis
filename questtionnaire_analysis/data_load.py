@@ -26,5 +26,9 @@ def data_load():
         for nth in ["questionnaire_middle.csv", "questionnaire_last.csv"]:
             header, data = _loads(fn / week / nth)
             questions.append(data)
+            if "middle" in nth:
+                middle_header = header
+            else:
+                last_header = header
 
-    return header, questions
+    return middle_header, last_header, questions
