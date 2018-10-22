@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import stats
 
 LIKERT_EVAL_IDX_MIDDLE = {
     "total": [4, 5, 6, 7, 8],
@@ -30,37 +31,37 @@ EVAL_FREE_IDX = {
 
 
 # データの取り出し
-def _extract_total_eval(week1, week2):
+# target = "total" or "agent"
+def _extract_eval(week1, week2, target):
     we1 = np.array(week1["middle"])
-    week1_claim = we1[:, LIKERT_EVAL_IDX_MIDDLE["total"][0]:LIKERT_EVAL_IDX_MIDDLE["total"][-1] + 1].tolist()
+    week1_claim = we1[:, LIKERT_EVAL_IDX_MIDDLE[target][0]:LIKERT_EVAL_IDX_MIDDLE[target][-1] + 1].tolist()
     we1 = np.array(week1["last"])
-    week1_random = we1[:, LIKERT_EVAL_IDX_LAST["total"][0]:LIKERT_EVAL_IDX_LAST["total"][-1] + 1].tolist()
+    week1_random = we1[:, LIKERT_EVAL_IDX_LAST[target][0]:LIKERT_EVAL_IDX_LAST[target][-1] + 1].tolist()
 
     we2 = np.array(week2["middle"])
-    week2_random = we2[:, LIKERT_EVAL_IDX_MIDDLE["total"][0]:LIKERT_EVAL_IDX_MIDDLE["total"][-1] + 1].tolist()
+    week2_random = we2[:, LIKERT_EVAL_IDX_MIDDLE[target][0]:LIKERT_EVAL_IDX_MIDDLE[target][-1] + 1].tolist()
     we2 = np.array(week2["last"])
-    week2_claim = we2[:, LIKERT_EVAL_IDX_LAST["total"][0]:LIKERT_EVAL_IDX_LAST["total"][-1] + 1].tolist()
+    week2_claim = we2[:, LIKERT_EVAL_IDX_LAST[target][0]:LIKERT_EVAL_IDX_LAST[target][-1] + 1].tolist()
 
     # 数値に変換
     week1_claim.extend(week2_claim)
-    claim_list =[]
+    claim_list = []
     for person in week1_claim:
         claim_list.append([int(e) for e in person])
     week1_random.extend(week2_random)
-    random_list=[]
+    random_list = []
     for person in week1_random:
         random_list.append([int(e) for e in person])
 
-    print(claim_list)
-
-    return claim_list, random_list
+    return np.array(claim_list).T.tolist(), np.array(random_list).T.tolist()
 
 
 def eval_total(week1, week2):
-    claim_evals, random_evals = _extract_total_eval(week1, week2)
+    claim_evals, random_evals = _extract_eval(week1, week2, "total")
 
-    print("claim_evals")
-    [print(c) for c in claim_evals]
+    for i in range(len(claim_evals)):
+        r = stats.kruskal(claim_evals[i], random_evals[i])
+        print(r)
 
 
 def significant_difference(week1, week2, middle_header, last_header):
