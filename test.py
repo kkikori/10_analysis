@@ -3,6 +3,7 @@ from collections import Counter
 from scipy import stats
 import numpy as np
 
+
 def _Kru(data1, data2):
     data1 = np.sort(data1)
     data2 = np.sort(data2)
@@ -15,14 +16,16 @@ def _Kru(data1, data2):
 
     data_all = np.concatenate([data1, data2])
     print(data_all)
+    cdf1 = np.searchsorted(data1, data_all, side="right")
+    print("cdf1", cdf1)
+
     cdf1 = np.searchsorted(data1, data_all, side="right") / (1.0 * n1)
+    print("cdf1", cdf1)
     cdf2 = np.searchsorted(data2, data_all, side="right") / (1.0 * n2)
     d = np.max(np.absolute(cdf1 - cdf2))
     en = np.sqrt(n1 * n2 / float(n1 + n2))
     prob = stats.distributions.kstwobign.sf((en + 0.12 + 0.11 / en) * d)
-    print("prob",prob)
-
-    print(cdf1)
+    print("prob", prob)
 
 
 def kss():
@@ -41,6 +44,7 @@ def main():
     k = [1, 2, 2, 3, 4]
     cc = Counter(k)
     print(cc)
+    print("cc[10]",cc[10])
     cc.update([1, 5])
     print(cc)
     kss()
