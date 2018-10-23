@@ -60,7 +60,9 @@ def eval_total(week1, week2):
     claim_evals, random_evals = _extract_eval(week1, week2, "total")
 
     for i in range(len(claim_evals)):
-        r = stats.kruskal(claim_evals[i], random_evals[i])
+        r = stats.wilcoxon(claim_evals[i], random_evals[i])
+        print("claim",claim_evals[i])
+        print("random",random_evals[i])
         print(r)
 
 
