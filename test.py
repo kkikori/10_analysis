@@ -2,6 +2,7 @@ import sys
 from collections import Counter
 from scipy import stats
 import numpy as np
+import my_ks
 
 
 def _Kru(data1, data2):
@@ -35,8 +36,8 @@ def kss():
     d2_d = [1, 8, 5, 0, 2, 0, 0]
     print(stats.ks_2samp(d1, d2))
     print(stats.ks_2samp(d1_d, d2_d))
-
-    _Kru(d1, d2)
+    print(my_ks.myks_test(d1, d2))
+    # _Kru(d1, d2)
 
 
 def main():
@@ -44,7 +45,7 @@ def main():
     k = [1, 2, 2, 3, 4]
     cc = Counter(k)
     print(cc)
-    print("cc[10]",cc[10])
+    print("cc[10]", cc[10])
     cc.update([1, 5])
     print(cc)
     kss()

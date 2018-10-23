@@ -33,3 +33,5 @@ def myks_test(data1, data2):
     prob = stats.distributions.kstwobign.sf(d * en)
 
     return {"statistic": d*en, "pvalue": prob}
+
+
