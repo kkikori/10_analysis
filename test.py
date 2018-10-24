@@ -1,8 +1,9 @@
-import sys
 from collections import Counter
-from scipy import stats
+
 import numpy as np
-import my_ks
+from scipy import stats
+
+from questtionnaire_analysis import my_ks
 
 
 def _Kru(data1, data2):

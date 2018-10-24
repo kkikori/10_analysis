@@ -5,6 +5,7 @@ import numpy as np
 
 # 累積相対度数を調べる
 def _cumulative_relative_frequency(values, data, sample_n):
+    # https://bellcurve.jp/statistics/glossary/1394.html
     dosuu = Counter(data.tolist())
 
     total_n = 0
@@ -17,7 +18,11 @@ def _cumulative_relative_frequency(values, data, sample_n):
     return np.array(frequency_lsit)
 
 
+Ks_2sampResult = namedtuple('myKs_2sampResult', ('statistic', 'pvalue'))
+
+
 def myks_test(data1, data2):
+    # https://bellcurve.jp/statistics/glossary/1360.html
     data1 = np.sort(data1)
     data2 = np.sort(data2)
     n1 = data1.shape[0]
@@ -32,6 +37,4 @@ def myks_test(data1, data2):
     en = np.sqrt(n1 * n2 / float(n1 + n2))
     prob = stats.distributions.kstwobign.sf(d * en)
 
-    return {"statistic": d*en, "pvalue": prob}
-
-
+    return Ks_2sampResult(d * en, prob)

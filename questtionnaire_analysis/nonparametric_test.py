@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import stats
+import my_ks
 
 LIKERT_EVAL_IDX_MIDDLE = {
     "total": [4, 5, 6, 7, 8],
@@ -55,15 +56,26 @@ def _extract_eval(week1, week2, target):
 
     return np.array(claim_list).T.tolist(), np.array(random_list).T.tolist()
 
+def _print_detail(claim_evals, random_evals):
+    claims = np.array(claim_evals)
+    randams = np.array(random_evals)
+    print("claim  :","average",np.average(claims),"median",np.median(claims),np.var(claims))
+    print("         ", claim_evals)
+    print("random :", "average", np.average(randams), "median", np.median(randams), np.var(randams))
+    print("         ", random_evals)
+
 
 def eval_total(week1, week2):
     claim_evals, random_evals = _extract_eval(week1, week2, "total")
 
     for i in range(len(claim_evals)):
+        _print_detail(claim_evals[i], random_evals[i])
         r = stats.wilcoxon(claim_evals[i], random_evals[i])
-        print("claim",claim_evals[i])
-        print("random",random_evals[i])
+
         print(r)
+        print(stats.ks_2samp(claim_evals[i], random_evals[i]))
+        print(my_ks.myks_test(claim_evals[i], random_evals[i]),"\n")
+
 
 
 def significant_difference(week1, week2, middle_header, last_header):

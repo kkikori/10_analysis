@@ -1,7 +1,7 @@
 import sys
 import data_load
 import quote
-import mykruskal
+import nonparametric_test
 
 
 def aggregated＿quote(week1, week2, header):
@@ -18,7 +18,7 @@ def main():
     week2 = {"middle": datas[2], "last": datas[3]}
 
     # aggregated＿quote(week1, week2, header)
-    mykruskal.significant_difference(week1, week2, middle_header, last_header)
+    nonparametric_test.significant_difference(week1, week2, middle_header, last_header)
 
 
 if __name__ == "__main__":
