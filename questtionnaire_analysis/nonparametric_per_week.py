@@ -8,6 +8,7 @@ LIKERT_EVAL_IDX_MIDDLE = {
     "system": [19, 20],
     "estimator": [21, 22, 23, 24, 25, 26, 27, 28, 29]
 }
+
 LIKERT_EVAL_IDX_LAST = {
     "total": [2, 3, 4, 5, 6],
     "agent": [10, 11, 12, 13, 14, 15],
@@ -33,25 +34,18 @@ EVAL_FREE_IDX = {
 
 # データの取り出し
 # target = "total" or "agent"
-def _extract_eval(week1, week2, target):
-    we1 = np.array(week1["middle"])
-    week1_claim = we1[:, LIKERT_EVAL_IDX_MIDDLE[target][0]:LIKERT_EVAL_IDX_MIDDLE[target][-1] + 1].tolist()
-    we1 = np.array(week1["last"])
-    week1_random = we1[:, LIKERT_EVAL_IDX_LAST[target][0]:LIKERT_EVAL_IDX_LAST[target][-1] + 1].tolist()
-
-    we2 = np.array(week2["middle"])
-    week2_random = we2[:, LIKERT_EVAL_IDX_MIDDLE[target][0]:LIKERT_EVAL_IDX_MIDDLE[target][-1] + 1].tolist()
-    we2 = np.array(week2["last"])
-    week2_claim = we2[:, LIKERT_EVAL_IDX_LAST[target][0]:LIKERT_EVAL_IDX_LAST[target][-1] + 1].tolist()
+def _extract_eval(week, target):
+    we = np.array(week["middle"])
+    claim_l = we[:, LIKERT_EVAL_IDX_MIDDLE[target][0]:LIKERT_EVAL_IDX_MIDDLE[target][-1] + 1].tolist()
+    we = np.array(week["last"])
+    random_l = we[:, LIKERT_EVAL_IDX_LAST[target][0]:LIKERT_EVAL_IDX_LAST[target][-1] + 1].tolist()
 
     # 数値に変換
-    week1_claim.extend(week2_claim)
     claim_list = []
-    for person in week1_claim:
+    for person in claim_l:
         claim_list.append([int(e) for e in person])
-    week1_random.extend(week2_random)
     random_list = []
-    for person in week1_random:
+    for person in random_l:
         random_list.append([int(e) for e in person])
 
     return np.array(claim_list).T.tolist(), np.array(random_list).T.tolist()
@@ -67,33 +61,26 @@ def _print_detail(claim_evals, random_evals):
     print("         ", random_evals)
 
 
-def eval_total(week1, week2, middle_header):
-    target = "total"
-
-    claim_evals, random_evals = _extract_eval(week1, week2, target)
+def _per_week_test(week, target, q_str_l):
+    claim_evals, random_evals = _extract_eval(week, target)
 
     for i in range(len(claim_evals)):
-        qi = LIKERT_EVAL_IDX_MIDDLE[target][i]
-
-        print("\n",middle_header[qi])
+        print("\n", q_str_l[i])
         _print_detail(claim_evals[i], random_evals[i])
-        r = stats.wilcoxon(claim_evals[i], random_evals[i])
-
-        print(r)
+        print(stats.wilcoxon(claim_evals[i], random_evals[i]))
         print(stats.ks_2samp(claim_evals[i], random_evals[i]))
         print(my_ks.myks_test(claim_evals[i], random_evals[i]))
 
 
-def significant_difference(week1, week2, middle_header, last_header):
-    print("middle")
-    [print(hi, hea) for hi, hea in enumerate(middle_header)]
-    print("\n\n\nlast")
-    [print(hi, hea) for hi, hea in enumerate(last_header)]
+def significant_difference_per_week(week1, week2, middle_header, last_header):
+    target = "agent"
 
-    claim_agent = {"week1": week1["middle"]}
-    # claim_agent.extend(week2["last"])
+    # 問題文の抽出
+    qi_l = LIKERT_EVAL_IDX_MIDDLE[target]
+    q_str_l = [middle_header[si] for si in qi_l]
 
-    # random_agent = week1["last"]
-    # random_agent.extend(week2["middle"])
+    print("\n\n\nweek1","-"*100)
+    _per_week_test(week1, target, q_str_l)
 
-    eval_total(week1, week2,middle_header)
+    print("\n\n\nweek2","-"*100)
+    _per_week_test(week2, target, q_str_l)

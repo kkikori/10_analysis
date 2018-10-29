@@ -2,6 +2,7 @@ import sys
 import data_load
 import quote
 import nonparametric_test
+import nonparametric_per_week
 
 
 def aggregated＿quote(week1, week2, header):
@@ -18,8 +19,8 @@ def main():
     week2 = {"middle": datas[2], "last": datas[3]}
 
     # aggregated＿quote(week1, week2, header)
-    nonparametric_test.significant_difference(week1, week2, middle_header, last_header)
-
+    #nonparametric_test.significant_difference(week1, week2, middle_header, last_header)
+    nonparametric_per_week.significant_difference_per_week(week1, week2, middle_header, last_header)
 
 if __name__ == "__main__":
     main()
