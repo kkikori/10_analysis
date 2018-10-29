@@ -1,6 +1,9 @@
 import numpy as np
 from scipy import stats
 import my_ks
+import copy
+import csv
+from pathlib import Path
 
 LIKERT_EVAL_IDX_MIDDLE = {
     "total": [4, 5, 6, 7, 8],
@@ -34,21 +37,24 @@ EVAL_FREE_IDX = {
 
 # データの取り出し
 # target = "total" or "agent"
-def _extract_eval(week, target):
+# week_t = "week1" or "week2"
+def _extract_eval(week, target, week_t):
     we = np.array(week["middle"])
-    claim_l = we[:, LIKERT_EVAL_IDX_MIDDLE[target][0]:LIKERT_EVAL_IDX_MIDDLE[target][-1] + 1].tolist()
+    middle_l = we[:, LIKERT_EVAL_IDX_MIDDLE[target][0]:LIKERT_EVAL_IDX_MIDDLE[target][-1] + 1].tolist()
     we = np.array(week["last"])
-    random_l = we[:, LIKERT_EVAL_IDX_LAST[target][0]:LIKERT_EVAL_IDX_LAST[target][-1] + 1].tolist()
+    last_l = we[:, LIKERT_EVAL_IDX_LAST[target][0]:LIKERT_EVAL_IDX_LAST[target][-1] + 1].tolist()
 
     # 数値に変換
-    claim_list = []
-    for person in claim_l:
-        claim_list.append([int(e) for e in person])
-    random_list = []
-    for person in random_l:
-        random_list.append([int(e) for e in person])
+    middle_list = []
+    for person in middle_l:
+        middle_list.append([int(e) for e in person])
+    last_list = []
+    for person in last_l:
+        last_list.append([int(e) for e in person])
 
-    return np.array(claim_list).T.tolist(), np.array(random_list).T.tolist()
+    if "1" in week_t:
+        return np.array(middle_list).T.tolist(), np.array(last_list).T.tolist()
+    return np.array(last_list).T.tolist(), np.array(middle_list).T.tolist()
 
 
 # 平均などの詳細
@@ -72,6 +78,46 @@ def _per_week_test(week, target, q_str_l):
         print(my_ks.myks_test(claim_evals[i], random_evals[i]))
 
 
+def _per_week_test_save(week, target, q_str_l, week_t):
+    claim_evals, random_evals = _extract_eval(week, target, week_t)
+
+    write_lists = []
+    for i in range(len(claim_evals)):
+        write_lists.append([q_str_l[i]])
+
+        # 詳細記入
+        claims = copy.deepcopy(claim_evals[i])
+        claims.insert(0, "claim")
+        write_lists.append(claims)
+        randoms = copy.deepcopy(random_evals[i])
+        randoms.insert(0, "random")
+        write_lists.append(randoms)
+        write_lists.append(["", "average", "median", "var"])
+        claim_np = np.array(claim_evals[i])
+        claims = ["claim", np.average(claim_np), np.median(claim_np), np.var(claim_np)]
+        write_lists.append(claims)
+        claim_np = np.array(random_evals[i])
+        claims = ["claim", np.average(claim_np), np.median(claim_np), np.var(claim_np)]
+        write_lists.append(claims)
+
+        r = stats.wilcoxon(claim_evals[i], random_evals[i])
+        write_lists.append(["wilcoxon test", r.statistic, r.pvalue])
+        print(r.statistic, r)
+        r = stats.ks_2samp(claim_evals[i], random_evals[i])
+        write_lists.append(["ks test", r.statistic, r.pvalue])
+        r = my_ks.myks_test(claim_evals[i], random_evals[i])
+        write_lists.append(["my-ks test", r.statistic, r.pvalue])
+        write_lists.append([])
+
+    f_p = Path("/Users/ida/Amazon Drive/201810実験結果")
+    fn = week_t + "_" + target + ".csv"
+    fn_p = f_p / fn
+    with fn_p.open("w") as f :
+        writer = csv.writer(f, lineterminator='\n')  # 行末は改行
+        writer.writerows(write_lists)
+    f.close()
+
+
 def significant_difference_per_week(week1, week2, middle_header, last_header):
     target = "agent"
 
@@ -79,8 +125,10 @@ def significant_difference_per_week(week1, week2, middle_header, last_header):
     qi_l = LIKERT_EVAL_IDX_MIDDLE[target]
     q_str_l = [middle_header[si] for si in qi_l]
 
-    print("\n\n\nweek1","-"*100)
-    _per_week_test(week1, target, q_str_l)
+    print("\n\n\nweek1", "-" * 100)
+    #_per_week_test(week1, target, q_str_l, "week1")
+    _per_week_test_save(week1, target, q_str_l, "week1")
 
-    print("\n\n\nweek2","-"*100)
-    _per_week_test(week2, target, q_str_l)
+    print("\n\n\nweek2", "-" * 100)
+    #_per_week_test(week2, target, q_str_l, "week2")
+    _per_week_test_save(week2, target, q_str_l, "week2")

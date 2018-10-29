@@ -1,6 +1,9 @@
 import numpy as np
 from scipy import stats
 import my_ks
+import copy
+import csv
+from pathlib import Path
 
 LIKERT_EVAL_IDX_MIDDLE = {
     "total": [4, 5, 6, 7, 8],
@@ -75,7 +78,7 @@ def eval_total(week1, week2, middle_header):
     for i in range(len(claim_evals)):
         qi = LIKERT_EVAL_IDX_MIDDLE[target][i]
 
-        print("\n",middle_header[qi])
+        print("\n", middle_header[qi])
         _print_detail(claim_evals[i], random_evals[i])
         r = stats.wilcoxon(claim_evals[i], random_evals[i])
 
@@ -83,6 +86,49 @@ def eval_total(week1, week2, middle_header):
         print(stats.ks_2samp(claim_evals[i], random_evals[i]))
         print(my_ks.myks_test(claim_evals[i], random_evals[i]))
 
+
+def eval_csv_save(week1, week2, middle_header):
+    target = "agent"
+
+    claim_evals, random_evals = _extract_eval(week1, week2, target)
+
+    write_lists = []
+    for i in range(len(claim_evals)):
+        qi = LIKERT_EVAL_IDX_MIDDLE[target][i]
+        write_lists.append([middle_header[qi]])
+
+        # 詳細記入
+        claims = copy.deepcopy(claim_evals[i])
+        claims.insert(0, "claim")
+        write_lists.append(claims)
+        randoms = copy.deepcopy(random_evals[i])
+        randoms.insert(0, "random")
+        write_lists.append(randoms)
+        write_lists.append(["", "average", "median", "var"])
+        claim_np = np.array(claim_evals[i])
+        claims = ["claim", np.average(claim_np), np.median(claim_np), np.var(claim_np)]
+        write_lists.append(claims)
+        claim_np = np.array(random_evals[i])
+        claims = ["claim", np.average(claim_np), np.median(claim_np), np.var(claim_np)]
+        write_lists.append(claims)
+
+        r = stats.wilcoxon(claim_evals[i], random_evals[i])
+        write_lists.append(["wilcoxon test", r.statistic, r.pvalue])
+        print(r.statistic, r)
+        r = stats.ks_2samp(claim_evals[i], random_evals[i])
+        write_lists.append(["ks test", r.statistic, r.pvalue])
+        r = my_ks.myks_test(claim_evals[i], random_evals[i])
+        write_lists.append(["my-ks test", r.statistic, r.pvalue])
+        write_lists.append([])
+
+    f_n = Path("/Users/ida/Amazon Drive/201810実験結果/eval_agent.csv")
+
+    with f_n.open("w") as f:
+        writer = csv.writer(f, lineterminator='\n')  # 行末は改行
+        writer.writerows(write_lists)
+    f.close()
+    print(type(write_lists))
+    #[print(f) for f in write_lists]
 
 def significant_difference(week1, week2, middle_header, last_header):
     print("middle")
@@ -96,4 +142,5 @@ def significant_difference(week1, week2, middle_header, last_header):
     # random_agent = week1["last"]
     # random_agent.extend(week2["middle"])
 
-    eval_total(week1, week2,middle_header)
+    #eval_total(week1, week2, middle_header)
+    eval_csv_save(week1, week2, middle_header)
