@@ -5,6 +5,8 @@ import copy
 import csv
 from pathlib import Path
 
+
+
 LIKERT_EVAL_IDX_MIDDLE = {
     "total": [4, 5, 6, 7, 8],
     "agent": [12, 13, 14, 15, 16, 17],
@@ -33,7 +35,6 @@ EVAL_FREE_IDX = {
     }
 }
 
-
 # データの取り出し
 # target = "total" or "agent"
 def _extract_eval(week1, week2, target):
@@ -44,8 +45,12 @@ def _extract_eval(week1, week2, target):
 
     we2 = np.array(week2["middle"])
     week2_random = we2[:, LIKERT_EVAL_IDX_MIDDLE[target][0]:LIKERT_EVAL_IDX_MIDDLE[target][-1] + 1].tolist()
+    # 議論テーマごとにみる場合
+    # week2_claim = we2[:, LIKERT_EVAL_IDX_MIDDLE[target][0]:LIKERT_EVAL_IDX_MIDDLE[target][-1] + 1].tolist()
     we2 = np.array(week2["last"])
     week2_claim = we2[:, LIKERT_EVAL_IDX_LAST[target][0]:LIKERT_EVAL_IDX_LAST[target][-1] + 1].tolist()
+    # 議論テーマごとに見る場合
+    # week2_random = we2[:, LIKERT_EVAL_IDX_LAST[target][0]:LIKERT_EVAL_IDX_LAST[target][-1] + 1].tolist()
 
     # 数値に変換
     week1_claim.extend(week2_claim)
@@ -58,6 +63,7 @@ def _extract_eval(week1, week2, target):
         random_list.append([int(e) for e in person])
 
     return np.array(claim_list).T.tolist(), np.array(random_list).T.tolist()
+
 
 
 # 平均などの詳細
@@ -109,7 +115,7 @@ def eval_csv_save(week1, week2, middle_header):
         claims = ["claim", np.average(claim_np), np.median(claim_np), np.var(claim_np)]
         write_lists.append(claims)
         claim_np = np.array(random_evals[i])
-        claims = ["claim", np.average(claim_np), np.median(claim_np), np.var(claim_np)]
+        claims = ["random", np.average(claim_np), np.median(claim_np), np.var(claim_np)]
         write_lists.append(claims)
 
         r = stats.wilcoxon(claim_evals[i], random_evals[i])
@@ -121,7 +127,7 @@ def eval_csv_save(week1, week2, middle_header):
         write_lists.append(["my-ks test", r.statistic, r.pvalue])
         write_lists.append([])
 
-    f_n = Path("/Users/ida/Amazon Drive/201810実験結果/eval_agent.csv")
+    f_n = Path("/Users/ida/Amazon Drive/201810実験結果/eval_agent_per_theme.csv")
 
     with f_n.open("w") as f:
         writer = csv.writer(f, lineterminator='\n')  # 行末は改行
@@ -132,9 +138,9 @@ def eval_csv_save(week1, week2, middle_header):
 
 def significant_difference(week1, week2, middle_header, last_header):
     print("middle")
-    [print(hi, hea) for hi, hea in enumerate(middle_header)]
+    #[print(hi, hea) for hi, hea in enumerate(middle_header)]
     print("\n\n\nlast")
-    [print(hi, hea) for hi, hea in enumerate(last_header)]
+    #[print(hi, hea) for hi, hea in enumerate(last_header)]
 
     claim_agent = {"week1": week1["middle"]}
     # claim_agent.extend(week2["last"])

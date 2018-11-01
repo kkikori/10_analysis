@@ -97,7 +97,7 @@ def _per_week_test_save(week, target, q_str_l, week_t):
         claims = ["claim", np.average(claim_np), np.median(claim_np), np.var(claim_np)]
         write_lists.append(claims)
         claim_np = np.array(random_evals[i])
-        claims = ["claim", np.average(claim_np), np.median(claim_np), np.var(claim_np)]
+        claims = ["random", np.average(claim_np), np.median(claim_np), np.var(claim_np)]
         write_lists.append(claims)
 
         r = stats.wilcoxon(claim_evals[i], random_evals[i])
