@@ -1,4 +1,4 @@
-import numpy as np
+from wilcoxon import my_wilcoxon
 
 LIKERT_EVAL_IDX_MIDDLE = {
     "total": [4, 5, 6, 7, 8],
@@ -37,12 +37,16 @@ class UsrClass():
         self.random_idx = random_idx
 
     def extract_value(self, target, nth):
-        idx = self.claim_term[target]
-        claim_v = idx[self.claim_idx[nth]]
-        idx = self.random_term[target]
-        random_v = idx[self.random_idx[nth]]
+        idx = self.claim_idx[target][nth]
+        claim_v = self.claim_term[idx]
+        idx = self.random_idx[target][nth]
+        random_v = self.random_term[idx]
 
         return claim_v, random_v
+
+    def dif_cr(self, target, nth):
+        claim_v, random_v = self.extract_value(target, nth)
+        return int(claim_v) - int(random_v)
 
 
 # ユーザ単位にデータ型を整理
@@ -68,40 +72,6 @@ def reshapes(week, t_claim, t_random):
     return User_list
 
 
-def _extract_target(week1, week2, target):
-    claims = []
-    randoms = []
-    q_s = len(LIKERT_EVAL_IDX_LAST[target])
-    for nth in range(q_s):
-        kari_c = []
-        kari_q = []
-        for user in week1:
-            print(user)
-            cv, rv = user.extract_value(target, nth)
-            print("cv",cv)
-            print("rv",rv)
-            kari_c.append(int(cv))
-            kari_q.append(int(rv))
-        claims.append(kari_c)
-        randoms.append(kari_q)
-
-    for nth in range(q_s):
-        kari_c = []
-        kari_q = []
-        for user in week2:
-            cv, rv = user.extract_value(target, nth)
-            kari_c.append(int(cv))
-            kari_q.append(int(rv))
-        claims[nth].extend(kari_c)
-        randoms[nth].extend(kari_q)
-
-    return claims, randoms
-
-
-def my_wilcoxon(week1, week2, target, middle_header):
-    claims, randoms = _extract_target(week1, week2, target)
-    print(claims)
-    print(randoms)
 
 
 def significant_difference(week1, week2, middle_header, last_header):
@@ -109,4 +79,4 @@ def significant_difference(week1, week2, middle_header, last_header):
     week1_user_list = reshapes(week1, "middle", "last")
     week2_user_list = reshapes(week2, "last", "middle")
 
-    my_wilcoxon(week1_user_list, week2_user_list, target, middle_header)
+    my_wilcoxon(week1_user_list, week2_user_list, target, middle_header, LIKERT_EVAL_IDX_MIDDLE)
