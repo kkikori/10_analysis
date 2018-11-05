@@ -1,9 +1,11 @@
 import sys
-import data_load
+import data_analysis
+
+
 
 
 def main():
-    data_load()
+    data_analysis.data_load()
 
 if __name__ == "__main__":
     main()

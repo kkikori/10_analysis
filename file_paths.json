@@ -1,0 +1,28 @@
+{
+  "week1": {
+    "root": "/Users/ida/Dropbox/201810_1week",
+    "claim": {
+      "threads":"discussion1",
+      "INDIVIDUAL_Q":"results_asking1/to_individual_q_list.csv",
+      "COLLECTIVE_Q":"results_asking1/to_collective_q_list.csv"
+    },
+    "random": {
+      "threads":"discussion2",
+      "INDIVIDUAL_Q":"results_asking2/to_individual_q_list.csv",
+      "COLLECTIVE_Q":"results_asking2/to_collective_q_list.csv"
+    }
+  },
+  "week2": {
+    "root": "/Users/ida/Dropbox/201810_2week",
+    "claim": {
+      "threads":"discussion2",
+      "INDIVIDUAL_Q":"results_asking2-2/to_individual_q_list.csv",
+      "COLLECTIVE_Q":"results_asking2-2/to_collective_q_list.csv"
+    },
+    "random": {
+      "threads":"discussion1",
+      "INDIVIDUAL_Q":"results_asking2-1/to_individual_q_list.csv",
+      "COLLECTIVE_Q":"results_asking2-1/to_collective_q_list.csv"
+    }
+  }
+}
