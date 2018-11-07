@@ -1,9 +1,10 @@
 import sys
-import data_analysis
+import preparate_analysis
 from pathlib import Path
 import simplejson as json
 
 
+# ファイルパスの準備
 def _preparate_path():
     fn = Path("file_paths.json")
     f = fn.open("r")
@@ -13,16 +14,21 @@ def _preparate_path():
     for week in jsonData:
         data_root = week.pop("root")
         root_path = Path(data_root)
+        sss = {}
         for rorc, v in week.items():
             paths = {}
             for fn, fp in v.items():
                 paths[fn] = root_path / fp
-        week_paths[rorc] = paths
+            sss[rorc] = paths
+        week_paths.append(sss)
+
+    return week_paths
 
 
 def main():
     paths_l = _preparate_path()
-    data_analysis.data_load(paths_l)
+    [print(path) for path in paths_l]
+    preparate_analysis.data_load(paths_l)
 
 
 if __name__ == "__main__":
