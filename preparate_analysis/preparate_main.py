@@ -32,15 +32,15 @@ def _preparate_per_thread(original_th, Post_list):
 
         usr_name = o_p["user"]["name"]
         new_p = pre_analysis.PostClass(pi=o_p["id"], \
-                                      created_at=_time_seikei(o_p["created_at"]), \
-                                      updated_at=tt, \
-                                      body=o_p["body"], \
-                                      reply_to_id=o_p["in_reply_to_id"], \
-                                      usr=usr_name, \
-                                      sentences=sentences, \
-                                      si_list=si_list, \
-                                      belong_th_i=original_th["id"]
-                                      )
+                                       created_at=_time_seikei(o_p["created_at"]), \
+                                       updated_at=tt, \
+                                       body=o_p["body"], \
+                                       reply_to_id=o_p["in_reply_to_id"], \
+                                       usr=usr_name, \
+                                       sentences=sentences, \
+                                       si_list=si_list, \
+                                       belong_th_i=original_th["id"]
+                                       )
         pi_list.append(new_p.id)
         Post_list[new_p.id] = new_p
         thread = preparation.ThreadClass(original_th["id"], original_th["title"], pi_list, pi_list[-1])
@@ -58,6 +58,7 @@ def _preparate_users(Post_list):
         User_list[post.usr].add_pi_list(pi)
 
     return User_list
+
 
 # スレッドをすべて読み取る
 def _load_json(fn):
@@ -82,7 +83,20 @@ def per_week_load(paths_l):
 
         User_list = _preparate_users(Post_list)
 
+        if agent_type == "claim":
+            clists = [Thread_list, User_list, Post_list]
+        else:
+            rlists = [Thread_list, User_list, Post_list]
+
+        preparation._previous_qs(Threads_list=Thread_list, Post_list=Post_list, User_list=User_list,
+                                 f_individual=paths_l["INDIVIDUAL_Q"], f_collective=paths_l["COLLECTIVE_Q"])
+
+    return pre_analysis.WeekClass(rlists[0], rlists[1], rlists[2], clists[0], clists[1], clists[2])
+
 
 def preparate_main(paths_l):
     # week1かweek2か
-    week1_C = per_week_load(paths_l[0])
+    Week1 = per_week_load(paths_l[0])
+    Week2 = per_week_load(paths_l[1])
+
+    return Week1,Week2
