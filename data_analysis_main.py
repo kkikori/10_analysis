@@ -1,7 +1,9 @@
 import sys
-import preparate_analysis
 from pathlib import Path
 import simplejson as json
+
+import preparate_analysis
+import analysis_funcs
 
 
 # ファイルパスの準備
@@ -28,7 +30,8 @@ def _preparate_path():
 def main():
     paths_l = _preparate_path()
     [print(path) for path in paths_l]
-    preparate_analysis.data_load(paths_l)
+    Week1, Week2 = preparate_analysis.preparate_main(paths_l)
+    analysis_funcs.analysis_main(Week1, Week2)
 
 
 if __name__ == "__main__":

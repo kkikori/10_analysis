@@ -53,9 +53,9 @@ def _preparate_per_thread(original_th, Post_list):
 def _preparate_users(Post_list):
     User_list = {}
     for pi, post in Post_list.items():
-        if post.usr not in User_list.keys():
-            User_list[post.usr] = pre_analysis.UserClass(post.usr)
-        User_list[post.usr].add_pi_list(pi)
+        if post.user_id not in User_list.keys():
+            User_list[post.user_id] = pre_analysis.UserClass(post.user_id)
+        User_list[post.user_id].add_pi_list(pi)
 
     return User_list
 
@@ -89,7 +89,7 @@ def per_week_load(paths_l):
             rlists = [Thread_list, User_list, Post_list]
 
         preparation._previous_qs(Threads_list=Thread_list, Post_list=Post_list, User_list=User_list,
-                                 f_individual=paths_l["INDIVIDUAL_Q"], f_collective=paths_l["COLLECTIVE_Q"])
+                                 f_individual=paths["INDIVIDUAL_Q"], f_collective=paths["COLLECTIVE_Q"])
 
     return pre_analysis.WeekClass(rlists[0], rlists[1], rlists[2], clists[0], clists[1], clists[2])
 
@@ -99,4 +99,4 @@ def preparate_main(paths_l):
     Week1 = per_week_load(paths_l[0])
     Week2 = per_week_load(paths_l[1])
 
-    return Week1,Week2
+    return Week1, Week2

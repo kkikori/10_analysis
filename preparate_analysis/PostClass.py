@@ -13,7 +13,7 @@ class PostClass():
             self.reply_to_id = None
         else:
             self.reply_to_id = reply_to_id["Int64"]
-        self.usr = usr
+        self.user_id = usr
         if not sentences:
             self.sentences = []
         else:
