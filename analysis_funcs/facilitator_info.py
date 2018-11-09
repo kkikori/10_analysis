@@ -27,18 +27,7 @@ def _per_facilitator_self(facilitator, Post_list, User_list, agent_Type, save_f)
         writer.writerow([])
     f.close()
 
-    return csv_rows
-
-
-def has_reply(Post_list):
-    for pi, post in Post_list.items():
-        if not post.reply_to_id:
-            continue
-        rep_post = Post_list[post.reply_to_id]
-        if rep_post.user_id != "facilitator":
-            continue
-        print("")
-        rep_rep_post = Post_list[rep_post.reply_to_id]
+    return
 
 
 def facilitator_self(Week, save_f):
