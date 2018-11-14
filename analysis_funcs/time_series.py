@@ -9,7 +9,12 @@ def _set_start_time(Post_list):
     pi_list = Post_list.keys()
     pi_list = sorted(pi_list)
 
-    return Post_list[pi_list[0]].created_at
+    st = Post_list[pi_list[0]].created_at
+
+    st_t = dt.datetime(st.year, st.month, st.day, st.hour, 0, 0, 0)
+    ft_t = st_t + dt.timedelta(hours=47)
+
+    return st_t, ft_t
 
 
 def _extract_time(pi_list, Post_list):
@@ -30,8 +35,7 @@ def _extract_time(pi_list, Post_list):
 
 # スレッドごとの投稿数の増加
 def counter_post_per_thread(Thread_list, Post_list, agent_Type, save_f):
-    start_t = _set_start_time(Post_list)
-    finish_t = start_t + dt.timedelta(hours=47)
+    start_t, finish_t = _set_start_time(Post_list)
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -49,13 +53,13 @@ def counter_post_per_thread(Thread_list, Post_list, agent_Type, save_f):
     print(len(x_times))
     print(len(y_nums))
     minutes = mdates.MinuteLocator(interval=120)  # interval分間隔で描画
-    timeFmt = mdates.DateFormatter('%H:%M')  # x軸の時刻表示フォーマットの設定
+    timeFmt = mdates.DateFormatter('%H')  # x軸の時刻表示フォーマットの設定
     ax.xaxis.set_major_locator(minutes)  # 上記の条件をグラフに設定
     ax.xaxis.set_major_formatter(timeFmt)  # 上記の条件をグラフに設定
     plt.xlim(start_t, finish_t)  # x軸の範囲を設定
     plt.ylim(0, 30)  # y軸の範囲を設定
-    plt.title(agent_Type)
-    plt.legend(loc='upper left')  #データの名前を表示
+    # plt.title(agent_Type)
+    plt.legend(loc='upper left')  # データの名前を表示
     fig.autofmt_xdate()  # いい感じにx軸の時刻表示を調節
 
     plt.savefig(str(save_f))
@@ -64,8 +68,7 @@ def counter_post_per_thread(Thread_list, Post_list, agent_Type, save_f):
 
 
 def counter_post_per_user(User_list, Post_list, agent_Type, save_f):
-    start_t = _set_start_time(Post_list)
-    finish_t = start_t + dt.timedelta(hours=47)
+    start_t, finish_t = _set_start_time(Post_list)
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -80,19 +83,19 @@ def counter_post_per_user(User_list, Post_list, agent_Type, save_f):
             continue
 
         ax.plot(x_times, y_nums, label=user.name, color=cm.summer((u_i - 1) / len(User_list)))
-        #ax.plot(x_times[-1], y_nums[-1], marker='o', color=cm.summer((u_i - 1) / len(User_list)))
+        # ax.plot(x_times[-1], y_nums[-1], marker='o', color=cm.summer((u_i - 1) / len(User_list)))
 
     days = mdates.MinuteLocator(interval=120)
-    daysFmt = mdates.DateFormatter('%H:%M')
+    daysFmt = mdates.DateFormatter('%H')
     ax.xaxis.set_major_locator(days)
     ax.xaxis.set_major_formatter(daysFmt)
     plt.xlim(start_t, finish_t)
     plt.ylim(0, 25)
-    plt.title(agent_Type)
+    # plt.title(agent_Type)
     plt.legend(loc='upper left')
     fig.autofmt_xdate()
     plt.savefig(str(save_f))
-    plt.show()
+    # plt.show()
 
 
 def time_series_analysis_main(Week, save_f, week):
