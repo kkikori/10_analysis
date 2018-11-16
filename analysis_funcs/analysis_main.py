@@ -19,5 +19,8 @@ def analysis_main(Week1, Week2):
     # analysis_funcs.time_series_analysis_main(Week2, result_fn, "week2")
 
 
-    analysis_funcs.facilitator_effect_main(Week1, result_fn, "week1")
-    analysis_funcs.facilitator_effect_main(Week2, result_fn, "week2")
+    #analysis_funcs.facilitator_effect_main(Week1, result_fn, "week1")
+    #analysis_funcs.facilitator_effect_main(Week2, result_fn, "week2")
+
+    analysis_funcs.post_nums_main(Week1, result_fn, "week1")
+    analysis_funcs.post_nums_main(Week2, result_fn, "week2")
