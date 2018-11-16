@@ -4,6 +4,8 @@ import numpy as np
 from scipy import stats
 
 from questtionnaire_analysis import my_ks
+import pandas as pd
+import matplotlib.pyplot as plt
 
 
 def _Kru(data1, data2):
@@ -52,5 +54,30 @@ def main():
     kss()
 
 
+def graf_errorbar():
+    data = pd.DataFrame([np.random.normal(10, 7, 100), np.random.normal(20, 5, 100) \
+                            , np.random.normal(10, 2, 100), np.random.normal(40, 10, 100)])  # 100×4の行列
+
+    x = np.arange(0, 4)
+    y = data.T.mean()  # 4つの要素についての計算に直したいのでdata.Tで転置。その後meanで各列の平均をとっている
+    e = np.sqrt(data.T.var())  # エラーバーとして標準偏差を採用
+
+    # エラーバー付き折れ線
+    plt.errorbar(x, y, e, label='The Graph')
+
+    data = pd.DataFrame([np.random.normal(10, 7, 100), np.random.normal(20, 5, 100) \
+                            , np.random.normal(10, 2, 100), np.random.normal(40, 10, 100)])  # 100×4の行列
+
+    x = np.arange(0, 4)
+    y = data.T.mean()  # 4つの要素についての計算に直したいのでdata.Tで転置。その後meanで各列の平均をとっている
+    e = np.sqrt(data.T.var())  # エラーバーとして標準偏差を採用
+    plt.errorbar(x, y, e, label='The Graph2')
+
+    plt.legend(loc="upper left")  # グラフラベルを左上に表示するオプション
+    plt.xlim(-1, 4)
+    plt.ylim(0, 55)
+    plt.show()
+
 if __name__ == "__main__":
-    main()
+    graf_errorbar()
+    #main()

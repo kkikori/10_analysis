@@ -1,19 +1,20 @@
 import csv
 import datetime as dt
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def _counter_p(p_time_list, gap_td):
     threshold = p_time_list[0]["t"] + gap_td
-    pnum = -1
-    for p_t in p_time_list:
+    pnum = 0
+    if len(p_time_list) <= 1:
+        return pnum
+
+    for p_t in p_time_list[1:]:
         if p_t["t"] > threshold:
-            if pnum == -1:
-                pnum = 0
             return pnum
-        elif p_t["usr"]:  # 管理者ユーザでない場合
+        elif p_t["usr"]:  # 管理者ユーザの投稿は除く
             pnum += 1
-    if pnum == -1:
-        pnum = 0
     return pnum
 
 
@@ -34,7 +35,7 @@ def _count_gap_post(Post_list, pi_list, p_time_list, gap_td):
     return gap_posts, facilitator_gap_times, usr_gap_times
 
 
-def _per_post_nums(Post_list, agent_Type, save_f, gap_td_list):
+def _per_post_nums_detail(Post_list, agent_Type, save_f, gap_td_list):
     pi_list = sorted(Post_list.keys())
 
     # 時間のみを先に取り出す
@@ -52,12 +53,60 @@ def _per_post_nums(Post_list, agent_Type, save_f, gap_td_list):
         writer.writerow([agent_Type])
         for gap_td in gap_td_list:
             gap_l, facilitator_l, usr_l = _count_gap_post(Post_list, pi_list, p_time_list, gap_td)
+
+            f_ave = sum(facilitator_l) / len(facilitator_l)
+            u_ave = sum(usr_l) / len(usr_l)
+
             writer.writerow(["gap_time:", str(gap_td)])
-            writer.writerow(["facilitator"])
+            writer.writerow(["facilitator", f_ave])
             writer.writerow(facilitator_l)
-            writer.writerow(["user"])
+            writer.writerow(["user", u_ave])
             writer.writerow(usr_l)
             writer.writerows([[], []])
+
+    return
+
+
+def _ave_and_var(plist):
+    pl = np.array(plist)
+    return np.average(pl), np.std(pl)
+
+
+def _per_post_nums(Post_list, agent_Type, save_f):
+    pi_list = sorted(Post_list.keys())
+
+    # 時間のみを先に取り出す
+    # 管理者ユーザか参加者かをtrue,falseで表す
+    p_time_list = []
+    for pi in pi_list:
+        if Post_list[pi].user_id not in ["facilitator", "kitkat"]:
+            p_time_list.append({"t": Post_list[pi].created_at, "usr": True})
+        else:
+            p_time_list.append({"t": Post_list[pi].created_at, "usr": False})
+
+    f_ave_list, f_std_list = [], []
+    u_ave_list, u_std_list = [], []
+
+    for gap_t in range(10, 121, 10):
+        gap_td = dt.timedelta(minutes=gap_t)
+        gap_l, facilitator_l, usr_l = _count_gap_post(Post_list, pi_list, p_time_list, gap_td)
+
+        f_ave, f_std = _ave_and_var(facilitator_l)
+        f_ave_list.append(f_ave)
+        f_std_list.append(f_std)
+
+        u_ave, u_std = _ave_and_var(usr_l)
+        u_ave_list.append(u_ave)
+        u_std_list.append(u_std)
+
+    # グラフ化(エラーバー付折れ線グラフ)
+    x = list(range(10, 121, 10))
+    print(len(x), len(f_ave_list), len(f_std_list))
+    plt.errorbar(x, f_ave_list, f_std_list, label="facilitator")
+    plt.errorbar(x, u_ave_list, u_std_list, label="user")
+    plt.legend(loc="upper left")
+
+    plt.show()
 
     return
 
@@ -68,10 +117,11 @@ def post_nums_main(Week, save_f, week):
     agent_Type = "claim"
     print("agent type ", agent_Type)
     sav_name = week + agent_Type + "_post_nums.csv"
-    _per_post_nums(Week.claim_post_l, agent_Type, save_f / sav_name, gap_td_list)
-
+    # _per_post_nums_detail(Week.claim_post_l, agent_Type, save_f / sav_name, gap_td_list)
+    _per_post_nums(Week.claim_post_l, agent_Type, save_f / sav_name)
 
     agent_Type = "random"
     print("agent type ", agent_Type)
     sav_name = week + agent_Type + "_post_nums.csv"
-    _per_post_nums(Week.random_post_l, agent_Type, save_f / sav_name, gap_td_list)
+    # _per_post_nums_detail(Week.random_post_l, agent_Type, save_f / sav_name, gap_td_list)
+    _per_post_nums(Week.random_post_l, agent_Type, save_f / sav_name)
