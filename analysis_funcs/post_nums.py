@@ -98,15 +98,19 @@ def _per_post_nums(Post_list, agent_Type, save_f):
         u_ave, u_std = _ave_and_var(usr_l)
         u_ave_list.append(u_ave)
         u_std_list.append(u_std)
-
+    fig = plt.figure()
     # グラフ化(エラーバー付折れ線グラフ)
-    x = list(range(10, 121, 10))
-    print(len(x), len(f_ave_list), len(f_std_list))
-    plt.errorbar(x, f_ave_list, f_std_list, label="facilitator")
-    plt.errorbar(x, u_ave_list, u_std_list, label="user")
+    xtick = list(range(10, 121, 10))
+    print(len(xtick), len(f_ave_list), len(f_std_list))
+    plt.errorbar(xtick, f_ave_list, f_std_list, label="facilitator", color="orange",linewidth=2)
+    # darkcyan
+    # firebrick
+
+    x = list(map(lambda x: x + 1, xtick))  # 標準偏差が見にくいので
+    plt.errorbar(x, u_ave_list, u_std_list, label="user", color="steelblue",linewidth=2)
     plt.legend(loc="upper left")
 
-    plt.show()
+    plt.savefig(str(save_f))
 
     return
 
@@ -116,12 +120,15 @@ def post_nums_main(Week, save_f, week):
 
     agent_Type = "claim"
     print("agent type ", agent_Type)
-    sav_name = week + agent_Type + "_post_nums.csv"
+    #sav_name = week + agent_Type + "_post_nums.csv"
     # _per_post_nums_detail(Week.claim_post_l, agent_Type, save_f / sav_name, gap_td_list)
+    sav_name = week + agent_Type + "_errobar.png"
     _per_post_nums(Week.claim_post_l, agent_Type, save_f / sav_name)
 
     agent_Type = "random"
     print("agent type ", agent_Type)
-    sav_name = week + agent_Type + "_post_nums.csv"
+    #sav_name = week + agent_Type + "_post_nums.csv"
     # _per_post_nums_detail(Week.random_post_l, agent_Type, save_f / sav_name, gap_td_list)
+
+    sav_name = week + agent_Type + "_errobar.png"
     _per_post_nums(Week.random_post_l, agent_Type, save_f / sav_name)
