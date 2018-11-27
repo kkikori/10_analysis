@@ -62,7 +62,7 @@ def _per_post_nums(Post_list, agent_Type, save_f):
     f_ave_list, f_std_list = [], []
     u_ave_list, u_std_list = [], []
 
-    for gap_t in range(10, 11, 10):
+    for gap_t in range(10, 121, 10):
         gap_td = dt.timedelta(minutes=gap_t)
         facilitator_l, usr_l = count_gap_post(Post_list, pi_list, p_time_list, gap_td)
 
@@ -78,12 +78,26 @@ def _per_post_nums(Post_list, agent_Type, save_f):
         print("facilitator", facilitator_l)
         print("uer", usr_l)
 
+    fig = plt.figure()
+    # グラフ化(エラーバー付折れ線グラフ)
+    xtick = list(range(10, 121, 10))
+    print(len(xtick), len(f_ave_list), len(f_std_list))
+    plt.errorbar(xtick, f_ave_list, f_std_list, label="facilitator", color="orange", linewidth=2)
+    # plt.plot(xtick, f_ave_list, label="facilitator", color="orange", linewidth=2)
+    # darkcyan
+    # firebrick
+
+    x = list(map(lambda x: x + 1, xtick))  # 標準偏差が見にくいので
+    plt.errorbar(x, u_ave_list, u_std_list, label="user", color="steelblue", linewidth=2)
+    # plt.plot(x, u_ave_list,label="user", color="steelblue", linewidth=2)
+    plt.legend(loc="upper left")
+
+    plt.savefig(str(save_f))
+
     return
 
 
 def increase_rate_main(Week, save_f, week):
-    gap_td_list = [dt.timedelta(minutes=15), dt.timedelta(minutes=30), dt.timedelta(hours=1), dt.timedelta(hours=2)]
-
     agent_Type = "claim"
     print("agent type ", agent_Type)
     # sav_name = week + agent_Type + "_post_nums.csv"
