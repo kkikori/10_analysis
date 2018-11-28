@@ -22,11 +22,15 @@ def analysis_main(Week1, Week2):
     # analysis_funcs.facilitator_effect_main(Week1, result_fn, "week1")
     # analysis_funcs.facilitator_effect_main(Week2, result_fn, "week2")
 
-    #analysis_funcs.post_nums_main(Week1, result_fn / "post_nums", "week1")
-    #analysis_funcs.post_nums_main(Week2, result_fn / "post_nums", "week2")
+    # analysis_funcs.post_nums_main(Week1, result_fn / "post_nums", "week1")
+    # analysis_funcs.post_nums_main(Week2, result_fn / "post_nums", "week2")
 
-    #analysis_funcs.test_post_nums(Week1, Week2, result_fn / "post_nums")
+    # analysis_funcs.test_post_nums(Week1, Week2, result_fn / "post_nums")
 
 
-    analysis_funcs.increase_rate_main(Week1, result_fn / "increase_rate", "week1")
-    analysis_funcs.increase_rate_main(Week2, result_fn / "increase_rate", "week2")
+    c_f, c_u, r_f, r_u = analysis_funcs.increase_rate_main(Week1, result_fn / "increase_rate", "week1")
+    w1 = [c_f, c_u, r_f, r_u]
+    c_f, c_u, r_f, r_u = analysis_funcs.increase_rate_main(Week2, result_fn / "increase_rate", "week2")
+    w2 = [c_f, c_u, r_f, r_u]
+
+    analysis_funcs.increase_rate_total_compare(w1, w2,result_fn / "increase_rate")
