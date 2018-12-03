@@ -1,9 +1,11 @@
 class WeekClass():
-    def __init__(self, rth_l, rusr_l, rpost_l, cth_l,cusr_l, cpost_l):
-        self.random_th_l = rth_l
-        self.random_usr_l = rusr_l
-        self.random_post_l = rpost_l
+    def __init__(self, randoms, claims):
+        self.random_th_l = randoms[0]
+        self.random_usr_l = randoms[1]
+        self.random_post_l = randoms[2]
+        self.random_mrph = randoms[3]
 
-        self.claim_th_l = cth_l
-        self.claim_usr_l = cusr_l
-        self.claim_post_l = cpost_l
+        self.claim_th_l = claims[0]
+        self.claim_usr_l = claims[1]
+        self.claim_post_l = claims[2]
+        self.claim_mrph = claims[3]

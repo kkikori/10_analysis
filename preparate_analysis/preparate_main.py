@@ -84,14 +84,14 @@ def per_week_load(paths_l):
         User_list = _preparate_users(Post_list)
 
         if agent_type == "claim":
-            clists = [Thread_list, User_list, Post_list]
+            clists = [Thread_list, User_list, Post_list, paths["MRPH"]]
         else:
-            rlists = [Thread_list, User_list, Post_list]
+            rlists = [Thread_list, User_list, Post_list, paths["MRPH"]]
 
         preparation._previous_qs(Threads_list=Thread_list, Post_list=Post_list, User_list=User_list,
                                  f_individual=paths["INDIVIDUAL_Q"], f_collective=paths["COLLECTIVE_Q"])
 
-    return pre_analysis.WeekClass(rlists[0], rlists[1], rlists[2], clists[0], clists[1], clists[2])
+    return pre_analysis.WeekClass(randoms=rlists, claims=clists)
 
 
 def preparate_main(paths_l):

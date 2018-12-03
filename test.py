@@ -6,7 +6,7 @@ from scipy import stats
 from questtionnaire_analysis import my_ks
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from gensim import corpora, models
 
 def _Kru(data1, data2):
     data1 = np.sort(data1)
@@ -78,6 +78,21 @@ def graf_errorbar():
     plt.ylim(0, 55)
     plt.show()
 
+
+def idf_test():
+    docs = [["a","b","c","b"],["a","a","a","b"],["c","d","e"]]
+    dct = corpora.Dictionary(docs)
+    corpus = [dct.doc2bow(line) for line in docs]
+    print(corpus)
+    model = models.TfidfModel(corpus)  # fit model
+    vector = model[corpus[2]]
+    print(vector)
+    #idfidf = models.tfidfmodel.precompute_idfs(wglobal=sma,dfs=dct,total_docs=len(docs))
+    #print(idfidf)
+
+
+
 if __name__ == "__main__":
-    graf_errorbar()
+    idf_test()
+    #graf_errorbar()
     #main()

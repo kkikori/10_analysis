@@ -4,12 +4,14 @@
     "claim": {
       "threads":"discussion1",
       "INDIVIDUAL_Q":"results_asking1/to_individual_q_list.csv",
-      "COLLECTIVE_Q":"results_asking1/to_collective_q_list.csv"
+      "COLLECTIVE_Q":"results_asking1/to_collective_q_list.csv",
+      "MRPH":"results_asking1/MrphAnalysis"
     },
     "random": {
       "threads":"discussion2",
       "INDIVIDUAL_Q":"results_asking2/to_individual_q_list.csv",
-      "COLLECTIVE_Q":"results_asking2/to_collective_q_list.csv"
+      "COLLECTIVE_Q":"results_asking2/to_collective_q_list.csv",
+      "MRPH":"results_asking2/MrphAnalysis"
     }
   },
   {
@@ -17,12 +19,14 @@
     "claim": {
       "threads":"discussion2",
       "INDIVIDUAL_Q":"results_asking2-2/to_individual_q_list.csv",
-      "COLLECTIVE_Q":"results_asking2-2/to_collective_q_list.csv"
+      "COLLECTIVE_Q":"results_asking2-2/to_collective_q_list.csv",
+      "MRPH":"results_asking2-2/MrphAnalysis"
     },
     "random": {
       "threads":"discussion1",
       "INDIVIDUAL_Q":"results_asking2-1/to_individual_q_list.csv",
-      "COLLECTIVE_Q":"results_asking2-1/to_collective_q_list.csv"
+      "COLLECTIVE_Q":"results_asking2-1/to_collective_q_list.csv",
+      "MRPH":"results_asking2-1/MrphAnalysis"
     }
   }
 ]
