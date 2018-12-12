@@ -21,6 +21,7 @@ class TfidfClass():
         self.stop_word_list = tfidf.create_stop_word_list(stopw_path)
         self.dictionary = corpora.Dictionary([])
         self.pos_l = ["名詞", "動詞", "形容詞"]
+        #self.pos_l = ["名詞"]
         self.courpus_tfidf = None
         self.texts = []
         self.tfidf_model = None
@@ -60,30 +61,18 @@ class TfidfClass():
 
         return text_tfidf
 
-    # idf値を計算するものを書く！
-    # 辞書とcorpusを参照すればできる気がする
-    # 実験1のやーつ
+    # word_str -> 出現する文書数　を書く
     def ref_idf(self):
-        corpus_size = len(self.corpus)
-
-        corpus_list = []
-        for text in self.corpus:
-            ze = list(np.zeros(len(self.dictionary)))
-            for word in text:
-                ze[word[0]] = word[1]
-            corpus_list.append(ze)
+        idfs = self.dictionary.dfs
 
         word_idfs = {}
-        corpus_list = np.array(corpus_list)
-
-        for wi in range(len(self.dictionary)):
-            count_word = Counter(list(corpus_list[:, wi]))
-            word_idfs[self.dictionary[wi]] = corpus_size - count_word[0]
+        for wi, df in idfs.items():
+            word_idfs[self.dictionary[wi]] = df
 
         return word_idfs
 
     def ref_idf_per_pi(self, pi):
-        corpus_size = len(self.corpus)
+        corpus_size = self.dictionary.num_docs
 
         post_corpus = self.corpus[self.pi_list.index(pi)]
 

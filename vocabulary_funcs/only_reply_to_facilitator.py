@@ -30,7 +30,6 @@ def _idf_extract(ui_list, Post_list, mrph_path):
         # print("   pi", pi)
         Tfidf.add_post_words(pi)
         post = Post_list[pi]
-
         post_idf = Tfidf.ref_idf_per_pi(pi)
 
         if not post_idf:
@@ -59,11 +58,11 @@ def graphing(fs, us, save_f):
     print(fs)
     u_xs = list(range(len(us[2])))
     print("usr", u_xs)
-    plt.bar(u_xs, us[0], yerr=us[1], label="user", color="steelblue", width=0.4, error_kw=error_bar_set)
+    plt.bar(u_xs, us[0], yerr=us[1], label="another", color="steelblue", width=0.4, error_kw=error_bar_set)
 
     f_xs = list(map(lambda x: x + 0.4, fs[2]))  # 標準偏差が見にくいので
     print("fa", f_xs)
-    plt.bar(f_xs, fs[0], yerr=fs[1], label="facilitator", color="orange", width=0.4, error_kw=error_bar_set)
+    plt.bar(f_xs, fs[0], yerr=fs[1], label="rep to agent", color="orange", width=0.4, error_kw=error_bar_set)
 
     u_xs = [x + 0.2 for x in u_xs]
     plt.xticks(u_xs, us[2])

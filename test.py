@@ -8,6 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from gensim import corpora, models
 
+
 def _Kru(data1, data2):
     data1 = np.sort(data1)
     data2 = np.sort(data2)
@@ -80,19 +81,23 @@ def graf_errorbar():
 
 
 def idf_test():
-    docs = [["a","b","c","b"],["a","a","a","b"],["c","d","e"]]
+    docs = [["a", "b", "c", "b"], ["a", "a", "a", "b"], ["c", "d", "e"]]
     dct = corpora.Dictionary(docs)
+    print(len(dct))
     corpus = [dct.doc2bow(line) for line in docs]
     print(corpus)
     model = models.TfidfModel(corpus)  # fit model
     vector = model[corpus[2]]
     print(vector)
-    #idfidf = models.tfidfmodel.precompute_idfs(wglobal=sma,dfs=dct,total_docs=len(docs))
-    #print(idfidf)
-
+    print(dct.id2token)
+    print(dct.dfs)
+    for wi, df in dct.dfs.items():
+        print(dct[wi], df)
+        # idfidf = models.tfidfmodel.precompute_idfs(wglobal=sma,dfs=dct,total_docs=len(docs))
+        # print(idfidf)
 
 
 if __name__ == "__main__":
     idf_test()
-    #graf_errorbar()
-    #main()
+    # graf_errorbar()
+    # main()

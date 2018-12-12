@@ -31,7 +31,8 @@ def main():
     paths_l = _preparate_path()
     [print(path) for path in paths_l]
     Week1, Week2 = preparate_analysis.preparate_main(paths_l)
-    analysis_funcs.analysis_main(Week1, Week2)
+    # analysis_funcs.analysis_main(Week1, Week2)
+    analysis_funcs.total_eval(Week1, Week2)
 
 
 if __name__ == "__main__":

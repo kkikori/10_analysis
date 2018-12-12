@@ -18,7 +18,7 @@ def vocab_usr(Week, save_f, week):
 
 def vocab_main(Week1, Week2):
     # 結果保存用ファイル名
-    result_fn = Path("/Users/ida/Amazon Drive/201810結果")
+    result_fn = Path("/Users/ida/Amazon Drive/201810結果/Vocabs")
 
     vocab_usr(Week1, result_fn / "vocab_only_rep2f", "Agroup")
     vocab_usr(Week2, result_fn / "vocab_only_rep2f", "Bgroup")
