@@ -73,9 +73,7 @@ class TfidfClass():
 
     def ref_idf_per_pi(self, pi):
         corpus_size = self.dictionary.num_docs
-
         post_corpus = self.corpus[self.pi_list.index(pi)]
-
         post_words = [self.dictionary[word[0]] for word in post_corpus]
 
         post_idfs = {}

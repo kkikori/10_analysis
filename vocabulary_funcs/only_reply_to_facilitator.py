@@ -45,7 +45,7 @@ def _idf_extract(ui_list, Post_list, mrph_path):
     return f_tfidf, else_tfidf
 
 
-def graphing(fs, us, save_f):
+def graphing_idf(fs, us, save_f):
     # https://stats.biopapyrus.jp/python/barplot.html
     error_bar_set = dict(
         lw=1,
@@ -80,7 +80,7 @@ def only_reply_to_facilitator(User_list, Post_list, mrph_path, save_f):
     usr_name_list = list(User_list.keys())
 
     usr_name_list.remove("kitkat")
-    usr_name_list.remove("facilitator")
+    usr_name_list.remove("faciitator")
 
     print(usr_name_list, type(usr_name_list))
     for u_idx, u_n in enumerate(usr_name_list):
@@ -105,4 +105,6 @@ def only_reply_to_facilitator(User_list, Post_list, mrph_path, save_f):
         u_std_list.append(u_std)
         # u_name_list[u_idx] = u_n + " (" + str(len(f_list)) + ")"
 
-    graphing([f_ave_list, f_std_list, f_x_list], [u_ave_list, u_std_list, usr_name_list], save_f)
+
+
+    graphing_idf([f_ave_list, f_std_list, f_x_list], [u_ave_list, u_std_list, usr_name_list], save_f)

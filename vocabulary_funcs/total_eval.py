@@ -50,10 +50,12 @@ def graphing(datas, labels, title, save_f):
     plt.legend(loc="best")
     plt.title(title)
     plt.xticks()
+    plt.xlim([3,16])
+    plt.ylim([0,300])
     plt.savefig(str(save_f))
     # plt.show()
 
-
+# 単語の出現数分布
 def vocab_total(Week1, Week2):
     Agroup_1 = ref_vocab_tf(Week1.claim_post_l, Week1.claim_mrph)
     print("A-group 1 preparated")
@@ -69,6 +71,6 @@ def vocab_total(Week1, Week2):
     result_fn = Path("/Users/ida/Amazon Drive/201810結果/Vocabs/total_eval")
 
     graphing(datas=[Agroup_1, Bgroup_1], labels=["Agroup", "Bgroup"], title="Thema 1",
-             save_f=result_fn / "テーマ1.png")
+             save_f=result_fn / "テーマ1_.png")
     graphing(datas=[Agroup_2, Bgroup_2], labels=["Agroup", "Bgroup"], title="Thema 2",
-             save_f=result_fn / "テーマ2.png")
+             save_f=result_fn / "テーマ2_.png")

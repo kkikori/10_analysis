@@ -30,9 +30,9 @@ def _preparate_path():
 def main():
     paths_l = _preparate_path()
     Week1, Week2 = preparate_analysis.preparate_main(paths_l)
-    # vocabulary_funcs.vocab_main(Week1, Week2)
+    vocabulary_funcs.vocab_main(Week1, Week2)
 
-    vocabulary_funcs.vocab_total(Week1, Week2)
+    #vocabulary_funcs.vocab_total(Week1, Week2)
 
 
 if __name__ == "__main__":
