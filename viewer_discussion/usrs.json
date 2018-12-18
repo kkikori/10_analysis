@@ -1,0 +1,52 @@
+[
+  {
+	"name": "facilitator",
+	"password": "test",
+	"display_name": "ファシリテータ"
+  },
+  {
+	"name": "panda",
+	"password": "test",
+	"display_name": "パンダ"
+  },
+    {
+	"name": "dolphin",
+	"password": "test",
+	"display_name": "イルカ"
+  },
+  {
+	"name": "elephant",
+	"password": "test",
+	"display_name": "ゾウ"
+  },
+    {
+	"name": "owl",
+	"password": "test",
+	"display_name": "フクロウ"
+  },
+  {
+	"name": "squirrel",
+	"password": "test",
+	"display_name": "リス"
+  },
+    {
+	"name": "rabbit",
+	"password": "test",
+	"display_name": "ウサギ"
+  },
+  {
+	"name": "mouse",
+	"password": "test",
+	"display_name": "ネズミ"
+  },
+    {
+	"name": "lion",
+	"password": "test",
+	"display_name": "ライオン"
+  },
+    {
+	"name": "kitkat",
+	"password": "test",
+	"display_name": "管理者"
+  }
+]

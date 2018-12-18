@@ -33,4 +33,5 @@ def analysis_main(Week1, Week2):
     c_f, c_u, r_f, r_u = analysis_funcs.increase_rate_main(Week2, result_fn / "increase_rate", "week2")
     w2 = [c_f, c_u, r_f, r_u]
 
-    analysis_funcs.increase_rate_total_compare(w1, w2,result_fn / "increase_rate")
+    # analysis_funcs.increase_rate_total_compare(w1, w2,result_fn / "increase_rate")
+    analysis_funcs.increase_rate2_main(Week1, Week2)

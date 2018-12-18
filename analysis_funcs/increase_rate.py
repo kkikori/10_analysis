@@ -14,10 +14,10 @@ def increase_rate_total_compare(w1, w2, save_f):
     # random agent : gold
     # users : steelblue
 
-    plt.plot(x, w1[1], label="users_w1_1", color="steelblue", linewidth=1,linestyle="dashed")
-    plt.plot(x, w1[3], label="users_w1_2", color="steelblue", linewidth=1,linestyle="dashed")
-    plt.plot(x, w2[1], label="users_w2_2", color="steelblue", linewidth=1,linestyle="dashed")
-    plt.plot(x, w2[3], label="users_w2_1", color="steelblue", linewidth=1,linestyle="dashed")
+    plt.plot(x, w1[1], label="users_w1_1", color="steelblue", linewidth=1, linestyle="dashed")
+    plt.plot(x, w1[3], label="users_w1_2", color="steelblue", linewidth=1, linestyle="dashed")
+    plt.plot(x, w2[1], label="users_w2_2", color="steelblue", linewidth=1, linestyle="dashed")
+    plt.plot(x, w2[3], label="users_w2_1", color="steelblue", linewidth=1, linestyle="dashed")
 
     plt.plot(x, w1[2], label="random_agent_w1", color="orange", linewidth=2)
     plt.plot(x, w2[2], label="random_agent_w1", color="gold", linewidth=2)
@@ -25,7 +25,7 @@ def increase_rate_total_compare(w1, w2, save_f):
     plt.plot(x, w2[0], label="agent_w2", color="tomato", linewidth=2)
 
     save_f = save_f / "total.png"
-    #plt.legend(loc="upper left")
+    # plt.legend(loc="upper left")
     plt.savefig(str(save_f))
     # plt.show()
 
@@ -56,7 +56,7 @@ def _increase_rate(pidx, p_time_list, gap_td):
     return increase_r
 
 
-def count_gap_post(Post_list, pi_list, p_time_list, gap_td):
+def count_gap_post(pi_list, p_time_list, gap_td):
     facilitator_gap_times = []
     usr_gap_times = []
     for pidx, pi in enumerate(pi_list):
@@ -65,12 +65,35 @@ def count_gap_post(Post_list, pi_list, p_time_list, gap_td):
         if not gap_ps:
             continue
 
-        if Post_list[pi].user_id not in ["facilitator", "kitkat"]:
+        if p_time_list[pidx]["usr"]:
             usr_gap_times.append(gap_ps)
-        elif Post_list[pi].user_id == "facilitator":
+        else:
             facilitator_gap_times.append(gap_ps)
 
+            # if Post_list[pi].user_id not in ["facilitator", "kitkat"]:
+            #     usr_gap_times.append(gap_ps)
+            # elif Post_list[pi].user_id == "facilitator":
+            #     facilitator_gap_times.append(gap_ps)
+
     return facilitator_gap_times, usr_gap_times
+
+def graf_increase_rate(f_ave_list,u_ave_list,save_f):
+
+    fig = plt.figure()
+    # グラフ化(エラーバー付折れ線グラフ)
+    xtick = list(range(10, 121, 10))
+    # print(len(xtick), len(f_ave_list), len(f_std_list))
+    # plt.errorbar(xtick, f_ave_list, f_std_list, label="facilitator", color="orange", linewidth=2)
+    plt.plot(xtick, f_ave_list, label="facilitator", color="orange", linewidth=2)
+    # darkcyan
+    # firebrick
+
+    x = list(map(lambda x: x + 1, xtick))  # 標準偏差が見にくいので
+    # plt.errorbar(x, u_ave_list, u_std_list, label="user", color="steelblue", linewidth=2)
+    plt.plot(x, u_ave_list, label="user", color="steelblue", linewidth=2)
+    plt.legend(loc="upper left")
+
+    plt.savefig(str(save_f))
 
 
 def _per_post_nums(Post_list, agent_Type, save_f):
@@ -90,7 +113,8 @@ def _per_post_nums(Post_list, agent_Type, save_f):
 
     for gap_t in range(10, 121, 10):
         gap_td = dt.timedelta(minutes=gap_t)
-        facilitator_l, usr_l = count_gap_post(Post_list, pi_list, p_time_list, gap_td)
+        # facilitator_l, usr_l = count_gap_post(Post_list, pi_list, p_time_list, gap_td)
+        facilitator_l, usr_l = count_gap_post(pi_list, p_time_list, gap_td)
 
         f_ave, f_std = analysis_funcs.ave_and_var(facilitator_l)
         f_ave_list.append(f_ave)
@@ -104,21 +128,7 @@ def _per_post_nums(Post_list, agent_Type, save_f):
         print("facilitator", facilitator_l)
         print("uer", usr_l)
 
-    fig = plt.figure()
-    # グラフ化(エラーバー付折れ線グラフ)
-    xtick = list(range(10, 121, 10))
-    # print(len(xtick), len(f_ave_list), len(f_std_list))
-    # plt.errorbar(xtick, f_ave_list, f_std_list, label="facilitator", color="orange", linewidth=2)
-    plt.plot(xtick, f_ave_list, label="facilitator", color="orange", linewidth=2)
-    # darkcyan
-    # firebrick
-
-    x = list(map(lambda x: x + 1, xtick))  # 標準偏差が見にくいので
-    # plt.errorbar(x, u_ave_list, u_std_list, label="user", color="steelblue", linewidth=2)
-    plt.plot(x, u_ave_list, label="user", color="steelblue", linewidth=2)
-    plt.legend(loc="upper left")
-
-    plt.savefig(str(save_f))
+    graf_increase_rate(f_ave_list, u_ave_list, save_f)
 
     return f_ave_list, u_ave_list
 

@@ -3,7 +3,7 @@ from pathlib import Path
 import simplejson as json
 
 import preparate_analysis
-import analysis_funcs
+import viewer_discussion
 
 
 # ファイルパスの準備
@@ -27,15 +27,29 @@ def _preparate_path():
     return week_paths
 
 
+def _ref_titles(thread_list):
+    th_titles = {}
+    for th_i, thread in thread_list.items():
+        th_titles[th_i] = thread.title
+
+    this = sorted(th_titles.keys())
+    titles = [th_titles[thi] for thi in this]
+    return titles
+
+
+def viewer_main(post_list, thread_list):
+    usr_token_l = viewer_discussion.create_user_main(True)
+    titles = _ref_titles(thread_list)
+    print(titles)
+    #viewer_discussion.create_post_main(usr_token_l, post_list,titles)
+    viewer_discussion.overwrites(post_list, usr_token_l["facilitator"])
+
+
 def main():
     paths_l = _preparate_path()
-    [print(path) for path in paths_l]
     Week1, Week2 = preparate_analysis.preparate_main(paths_l)
-    # analysis_funcs.analysis_main(Week1, Week2)
-    # analysis_funcs.total_eval(Week1, Week2)
 
-    # analysis_funcs.increase_rate_main(Week1, Week2)
-    analysis_funcs.increase_rate2_main(Week1, Week2)
+    viewer_main(Week1.claim_post_l, Week1.claim_th_l)
 
 
 if __name__ == "__main__":
