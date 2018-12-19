@@ -20,8 +20,14 @@ def _post_post(token, post, titles):
         }
         viewer_discussion.create_post(token, data)
 
-
     return titles
+
+
+def _overwrite(post, token):
+    for sidx, s in enumerate(post.sentences):
+        si = post.si_list[sidx]
+        d = {"component_type": s.component_type, "related_to_id": s.related_to}
+        viewer_discussion.updated_sentence(si, token, d)
 
 
 # dummy_discussion_mainから呼び出される
@@ -31,5 +37,6 @@ def create_post_main(user_list, post_list, titles):
         print("pi", pi, post.user_id)
         token = user_list[post.user_id]
         titles = _post_post(token, post, titles)
+        _overwrite(post, token)
 
     return

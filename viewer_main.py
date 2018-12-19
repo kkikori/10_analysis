@@ -42,7 +42,7 @@ def viewer_main(post_list, thread_list):
     titles = _ref_titles(thread_list)
     print(titles)
     #viewer_discussion.create_post_main(usr_token_l, post_list,titles)
-    viewer_discussion.overwrites(post_list, usr_token_l["facilitator"])
+    viewer_discussion.overwrites_10(post_list, usr_token_l["facilitator"])
 
 
 def main():

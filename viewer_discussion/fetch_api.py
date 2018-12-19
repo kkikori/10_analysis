@@ -19,7 +19,7 @@ def _send(endpoint, type, data=None, token=None):
 
 
 def get_access_token(name, password):
-    print("name",name)
+    print("name", name)
     request_data = {
         'name': name,
         'password': password,
@@ -71,3 +71,12 @@ def get_thi_list(token):
     for thread in threads:
         thi_list.append(thread["id"])
     return thi_list
+
+
+def get_threads_data(token):
+    thi_list = get_thi_list(token)
+    threads_data = []
+    for th_i in thi_list:
+        threads_data.append(load_thread(token, th_i))
+
+    return threads_data
